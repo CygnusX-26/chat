@@ -1,0 +1,8 @@
+services:
+  chat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: chat
+    ports:
+     - "34446:34446"
