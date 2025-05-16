@@ -97,7 +97,7 @@ char* comma_separated_active_users() {
         if (i != num_active_users - 1) {
             strcat(user_string, ", ");
         }
-        string_length += strlen(user_string);
+        string_length = strlen(user_string);
     }
     free(active_users);
     active_users = NULL;
