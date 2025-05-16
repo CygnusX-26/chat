@@ -10,6 +10,7 @@
 #include <pthread.h>
 
 #include "user.h"
+#include "utils.h"
 
 #define PORT (34446)
 #define BACKLOG (5)

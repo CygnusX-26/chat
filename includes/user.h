@@ -22,6 +22,5 @@ typedef struct user {
 User* get_user(USERID);
 USERID join(int, char *);
 void leave(USERID);
-void send_message(USERID, char *);
 
 #endif // _USER

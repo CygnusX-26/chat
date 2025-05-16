@@ -2,3 +2,4 @@ out
 .gitignore
 Dockerfile
 compose.yml
+chat

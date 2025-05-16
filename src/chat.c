@@ -6,8 +6,8 @@
 #include <arpa/inet.h>
 #include <pthread.h>
 
-#include "includes/chat.h"
-#include "includes/user.h"
+#include "../includes/chat.h"
+#include "../includes/user.h"
 
 User** users;
 int user_count;
@@ -30,8 +30,8 @@ void* handle_client(void* fd) {
 
     char* prompt = "Welcome to the scuffed chat room...\nusername: ";
     send(client_fd, prompt, strlen(prompt), 0);
-    char* username = malloc(sizeof(char) * (USERNAME_LEN + 1));
 
+    char* username = malloc(sizeof(char) * (USERNAME_LEN + 1));
     if (recv(client_fd, username, USERNAME_LEN, 0) < 0) {
         free(username);
         username = NULL;
@@ -47,42 +47,16 @@ void* handle_client(void* fd) {
     User* user = get_user(userid);
     ssize_t username_len = strlen(user->name);
 
-    char* join_text_pre = "** ";
-    char* join_text_post = " has joined ** \n";
-    char* join_message = malloc(sizeof(char) * (username_len + strlen(join_text_post) + strlen(join_text_pre) + 1));
-    strcpy(join_message, join_text_pre);
-    strcat(join_message, username);
-    strcat(join_message, join_text_post);
-    send_message(SYSTEM, join_message);
-    free(join_message);
-    join_message = NULL;
+    send_template_message("** ", username, " has joined **\n", SYSTEM);
 
-    char* message_pre = "";
-    char* message_post = ": ";
-    char* message = malloc(username_len + MESSAGE_LEN + strlen(message_pre) + strlen(message_post) + 1);
-    strcpy(message, message_pre);
-    strcat(message, user->name);
-    strcat(message, message_post);
-
-    char* buffer = message + username_len + 2;
+    char buffer[MESSAGE_LEN];
     ssize_t bytes_read = 0;
-    while ((bytes_read = recv(client_fd, message + username_len + 2, MESSAGE_LEN, 0)) > 0) {
-        send_message(userid, message);
+    while ((bytes_read = recv(client_fd, buffer, MESSAGE_LEN, 0)) > 0) {
+        send_template_message(username, ": ", buffer, userid);
         memset(buffer, 0, MESSAGE_LEN);
     }
-    
-    free(message);
-    message = NULL;
 
-    char* leave_text_pre = "** ";
-    char* leave_text_post = " has left ** \n";
-    char* leave_message = malloc(sizeof(char) * (username_len + strlen(leave_text_pre) + strlen(leave_text_post) + 1));
-    strcpy(leave_message, leave_text_pre);
-    strcat(leave_message, username);
-    strcat(leave_message, leave_text_post);
-    send_message(SYSTEM, leave_message);
-    free(leave_message);
-    leave_message = NULL;
+    send_template_message("** ", username, " has left **\n", SYSTEM);
 
     leave(userid);
     return NULL;
