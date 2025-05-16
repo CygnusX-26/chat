@@ -87,20 +87,19 @@ char* comma_separated_active_users() {
     if (num_active_users == 0) {
         user_string = calloc(5, sizeof(char));
         strcpy(user_string, "None");
+        return user_string;
     }
-    else {
-        for (int i = 0; i < num_active_users; i++) {
-            name = active_users[i]->name;
-            user_string = realloc(user_string, sizeof(char) * (string_length + strlen(name) + 3));
-            strcat(user_string, name);
-            if (i != num_active_users - 1) {
-                strcat(user_string, ", ");
-            }
-            string_length += strlen(user_string);
+    for (int i = 0; i < num_active_users; i++) {
+        name = active_users[i]->name;
+        user_string = realloc(user_string, sizeof(char)
+            * (string_length + strlen(name) + 3));
+        strcat(user_string, name);
+        if (i != num_active_users - 1) {
+            strcat(user_string, ", ");
         }
-        free(active_users);
-        active_users = NULL;
+        string_length += strlen(user_string);
     }
-    
+    free(active_users);
+    active_users = NULL;
     return user_string;
 }
