@@ -78,6 +78,11 @@ int main() {
 
     init();
 
+    if (pthread_mutex_init(&lock, NULL) != 0) {
+        perror("mutex init");
+        exit(EXIT_FAILURE);
+    }
+
     int server_fd = socket(PF_INET, SOCK_STREAM, 0);
     int opt = 1;
     struct sockaddr_in addr_in;
