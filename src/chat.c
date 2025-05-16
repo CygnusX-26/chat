@@ -44,7 +44,7 @@ void* handle_client(void* fd) {
     tmsg = NULL;
     active = NULL;
 
-    char* username = malloc(sizeof(char) * (USERNAME_LEN + 1));
+    char* username = calloc(USERNAME_LEN + 1, sizeof(char));
     if (recv(client_fd, username, USERNAME_LEN, 0) <= 0) {
         free(username);
         username = NULL;
