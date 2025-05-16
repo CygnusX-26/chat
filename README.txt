@@ -1,4 +1,7 @@
+A small chat application with color terminals.
 
-Small chat WIP.
+Connect with:
+`socat READLINE TCP:host:port`
 
-To build: make
+Build:
+`make && ./out/chat`
