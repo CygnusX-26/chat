@@ -85,7 +85,7 @@ char* comma_separated_active_users() {
     char* name = NULL;
 
     if (num_active_users == 0) {
-        user_string = malloc(sizeof(char) * 5);
+        user_string = calloc(5, sizeof(char));
         strcpy(user_string, "None");
     }
     else {
