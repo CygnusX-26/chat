@@ -93,6 +93,7 @@ char* comma_separated_active_users() {
         name = active_users[i]->name;
         user_string = realloc(user_string, sizeof(char)
             * (string_length + strlen(name) + 3));
+        memset(user_string, '\0', string_length + strlen(name) + 3);
         strcat(user_string, name);
         if (i != num_active_users - 1) {
             strcat(user_string, ", ");
