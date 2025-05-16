@@ -5,13 +5,18 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <pthread.h>
+#include <time.h>
 
 #include "../includes/chat.h"
-#include "../includes/user.h"
 
 User** users;
 int user_count;
 pthread_mutex_t lock;
+
+const char* colors[] = {
+    "\033[94m", "\033[92m", "\033[96m",
+    "\033[95m", "\033[93m", "\033[97m"
+};
 
 void init() {
     users = calloc(ROOMSIZE, sizeof(User*));
@@ -28,11 +33,19 @@ void* handle_client(void* fd) {
     free(fd);
     fd = NULL;
 
-    char* prompt = "Welcome to the scuffed chat room...\nusername: ";
-    send(client_fd, prompt, strlen(prompt), 0);
+    char* active = comma_separated_active_users();
+    char* tmsg = template_message("Welcome to the scuffed chat room...\r\n"
+        "\033[96m[~] Currently online: ", active, "\033[0m\r\n"
+        "name: "
+    );
+    send(client_fd, tmsg, strlen(tmsg), 0);
+    free(active);
+    free(tmsg);
+    tmsg = NULL;
+    active = NULL;
 
     char* username = malloc(sizeof(char) * (USERNAME_LEN + 1));
-    if (recv(client_fd, username, USERNAME_LEN, 0) < 0) {
+    if (recv(client_fd, username, USERNAME_LEN, 0) <= 0) {
         free(username);
         username = NULL;
         return NULL;
@@ -47,16 +60,17 @@ void* handle_client(void* fd) {
     User* user = get_user(userid);
     ssize_t username_len = strlen(user->name);
 
-    send_template_message("** ", username, " has joined **\n", SYSTEM);
+    send_template_message("\033[92m[+] ", username, " has joined.\033[0m\r\n", SYSTEM);
 
     char buffer[MESSAGE_LEN];
     ssize_t bytes_read = 0;
+    int color_index = (time(NULL)) % 6;
     while ((bytes_read = recv(client_fd, buffer, MESSAGE_LEN, 0)) > 0) {
-        send_template_message(username, ": ", buffer, userid);
+        send_template_message2(colors[color_index], username, "\033[0m: ", buffer, userid);
         memset(buffer, 0, MESSAGE_LEN);
     }
 
-    send_template_message("** ", username, " has left **\n", SYSTEM);
+    send_template_message("\033[91m[-] ", username, " has left.\033[0m\r\n", SYSTEM);
 
     leave(userid);
     return NULL;
