@@ -45,7 +45,7 @@ void* handle_client(void* fd) {
     active = NULL;
 
     char* username = malloc(sizeof(char) * (USERNAME_LEN + 1));
-    if (recv(client_fd, username, USERNAME_LEN, 0) <= 0) {
+    if (recv(client_fd, username, USERNAME_LEN - 1, 0) <= 0) {
         free(username);
         username = NULL;
         return NULL;
