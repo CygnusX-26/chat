@@ -80,7 +80,6 @@ User** get_active_users(int* num_users) {
 char* comma_separated_active_users() {
     int num_active_users = 0;
     User** active_users = get_active_users(&num_active_users);
-    User* curr;
     char* user_string = NULL;
     int string_length = 0;
     char* name = NULL;

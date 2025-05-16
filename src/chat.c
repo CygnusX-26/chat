@@ -57,8 +57,6 @@ void* handle_client(void* fd) {
     }
 
     USERID userid = join(client_fd, username);
-    User* user = get_user(userid);
-    ssize_t username_len = strlen(user->name);
 
     send_template_message("\033[92m[+] ", username, " has joined.\033[0m\r\n", SYSTEM);
 
@@ -76,7 +74,7 @@ void* handle_client(void* fd) {
     return NULL;
 }
 
-int main(int argc, char** argv) {
+int main() {
 
     init();
 
@@ -126,6 +124,7 @@ int main(int argc, char** argv) {
             perror("accept");
         }
         printf("Connection accepted from %s:%d\n", inet_ntoa(addr_in.sin_addr), ntohs(addr_in.sin_port));
+        fflush(stdout);
 
         pthread_t tid;
         if (pthread_create(&tid, NULL, handle_client, client_fd) != 0) {

@@ -3,3 +3,4 @@ out
 Dockerfile
 compose.yml
 chat
+.git
