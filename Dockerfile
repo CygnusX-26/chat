@@ -7,7 +7,7 @@ WORKDIR /app
 
 RUN mkdir out
 
-RUN gcc -static -Wall -Wextra -O2 src/chat.c src/user.c src/utils.c -o out/chat
+RUN gcc -static -Wall -Wextra -O2 -lsqlite3 src/chat.c src/user.c src/utils.c -o out/chat
 
 FROM scratch
 
