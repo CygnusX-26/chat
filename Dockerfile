@@ -1,16 +1,10 @@
-FROM alpine:latest AS build
+FROM gcc:latest
 
-RUN apk add --no-cache build-base sqlite-static
-
-COPY . /app
+RUN apt-get update && apt-get install -y make libsqlite3-dev && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 
-RUN mkdir out
+COPY . .
 
-RUN gcc -static -Wall -Wextra -O2 -lsqlite3 src/chat.c src/user.c src/utils.c -o out/chat
+RUN make
 
-FROM scratch
-
-COPY --from=build /app/out/chat /chat
-COPY --from=build /app/db/init.sql /init.sql
-ENTRYPOINT ["/chat"]
+CMD ["./out/chat"]
