@@ -56,7 +56,7 @@ int handle_recent(void* data, int argc, char** argv, char** colNames) {
  * gets the num most recent messages and returns them as a malloc'ed string.
  */
 char* get_recent_messages(int num) {
-    (void) num;
+    (void) num; //TODO not make this hardcoded
     char* sql = "SELECT * FROM "
         "(SELECT message, created_at FROM chat_history "
         "ORDER BY created_at DESC LIMIT 10) "

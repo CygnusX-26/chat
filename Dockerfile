@@ -12,4 +12,5 @@ RUN gcc -static -Wall -Wextra -O2 src/chat.c src/user.c src/utils.c -o out/chat
 FROM scratch
 
 COPY --from=build /app/out/chat /chat
+COPY --from=build /app/db/init.sql /init.sql
 ENTRYPOINT ["/chat"]
