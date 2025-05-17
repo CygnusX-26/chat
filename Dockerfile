@@ -1,6 +1,6 @@
 FROM alpine:latest AS build
 
-RUN apk add --no-cache build-base sqlite-dev
+RUN apk add --no-cache build-base sqlite-static
 
 COPY . /app
 WORKDIR /app
