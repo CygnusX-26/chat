@@ -15,7 +15,7 @@ pthread_mutex_t lock;
 
 const char* colors[] = {
     "\033[94m", "\033[92m", "\033[96m",
-    "\033[95m", "\033[93m", "\033[91m"
+    "\033[95m", "\033[93m"
 };
 
 void init() {
@@ -72,7 +72,7 @@ void* handle_client(void* fd) {
 
     char buffer[MESSAGE_LEN];
     ssize_t bytes_read = 0;
-    int color_index = (time(NULL)) % 6;
+    int color_index = (time(NULL)) % 5;
     while ((bytes_read = recv(client_fd, buffer, MESSAGE_LEN, 0)) > 0) {
         send_template_message2(colors[color_index], username, "\033[0m: ", buffer, userid);
         memset(buffer, 0, MESSAGE_LEN);
