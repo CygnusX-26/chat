@@ -19,6 +19,10 @@ const char* colors[] = {
 };
 
 void init() {
+    if (sqlite3_threadsafe() <= 0) {
+        puts("*** Your SQLITE3 is not threadsafe issues may occur when running. ***");
+    }
+
     users = calloc(ROOMSIZE, sizeof(User*));
     for (int i = 0; i < ROOMSIZE; i++) {
         User* empty = malloc(sizeof(User));
@@ -26,6 +30,7 @@ void init() {
         users[i] = empty;
     }
     user_count = 0;
+    init_db();
 }
 
 void* handle_client(void* fd) {
@@ -55,6 +60,11 @@ void* handle_client(void* fd) {
     if (p) {
         *p = '\0';
     }
+
+    char* prev_messages = get_recent_messages(10);
+    send(client_fd, prev_messages, strlen(prev_messages), 0);
+    free(prev_messages);
+    prev_messages = NULL;
 
     USERID userid = join(client_fd, username);
 

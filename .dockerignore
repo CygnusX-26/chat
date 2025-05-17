@@ -4,3 +4,4 @@ Dockerfile
 compose.yml
 chat
 .git
+*.db

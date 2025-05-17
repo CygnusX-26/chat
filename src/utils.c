@@ -15,8 +15,12 @@ void send_message(USERID sender, char* message) {
         }
     }
     pthread_mutex_unlock(&lock);
+    insert_message(message);
 } /* send_message() */
 
+/*
+ * templates a message with "pretext{contents}posttext"
+ */
 char* template_message(const char* text_pre, const char* contents, const char* text_post) {
     char* message = malloc(sizeof(char) *
         (strlen(contents) + strlen(text_pre) + strlen(text_post) + 1));
@@ -24,7 +28,7 @@ char* template_message(const char* text_pre, const char* contents, const char* t
     strcat(message, contents);
     strcat(message, text_post);
     return message;
-}
+} /* template_message() */
 
 /*
  * sends a templated message  with pretext, contents,
@@ -37,6 +41,9 @@ void send_template_message(const char* text_pre, const char* contents, const cha
     message = NULL;
 } /* send_template_message() */
 
+/*
+ * templates a message with "pretext{content1}{content2}posttext"
+ */
 char* template_message2(const char* text_pre, const char* content1, const char* content2, const char* text_post) {
     char* message = malloc(sizeof(char) *
         (strlen(content1) + strlen(content2) + strlen(text_pre) + strlen(text_post) + 1));
@@ -45,7 +52,7 @@ char* template_message2(const char* text_pre, const char* content1, const char* 
     strcat(message, content2);
     strcat(message, text_post);
     return message;
-}
+} /* template_message2() */
 
 /*
  * sends a templated message with pretext, contents, contents2
@@ -77,6 +84,9 @@ User** get_active_users(int* num_users) {
     return active_users;
 } /* get_active_users() */
 
+/*
+ * returns a malloc'ed comma separated string of all active usernames
+ */
 char* comma_separated_active_users() {
     int num_active_users = 0;
     User** active_users = get_active_users(&num_active_users);
@@ -103,4 +113,4 @@ char* comma_separated_active_users() {
     free(active_users);
     active_users = NULL;
     return user_string;
-}
+} /* comma_separated_active_users() */

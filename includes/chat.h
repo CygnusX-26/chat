@@ -10,9 +10,9 @@
 #include <pthread.h>
 #include <time.h>
 
-
 #include "user.h"
 #include "utils.h"
+#include "db.h"
 
 #define PORT (34446)
 #define BACKLOG (5)
@@ -23,5 +23,6 @@
 extern User** users;
 extern int user_count;
 extern pthread_mutex_t lock;
+extern sqlite3* db;
 
 #endif // _CHAT
